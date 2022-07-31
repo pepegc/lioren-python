@@ -9,8 +9,8 @@ def get_caf(type, results_per_page=10, page=1):
     results_per_page -- Integer (min 1, max 100)
     page -- Integer (min 1)
     """
-    params = {'tipodoc':type, 'rpp':resuls_per_page, 'page':page}
-    return _get('cafs', params=params)
+    params = {"tipodoc": type, "rpp": resuls_per_page, "page": page}
+    return _get("cafs", params=params)
 
 
 def get_caf(id):
@@ -18,7 +18,7 @@ def get_caf(id):
     Keyword arguments:
     id -- Integer (min 1, max 100)
     """
-    return _get('cafs/'+str(id))
+    return _get("cafs/" + str(id))
 
 
 def post_caf(type, quantity):
@@ -27,8 +27,8 @@ def post_caf(type, quantity):
     type -- String (minlength 2, maxlength 3)
     quantity -- Integer (min 1, max 10000)
     """
-    data = {'tipodoc':type, 'quantity':quantity}
-    return _post('cafs', data=data)
+    data = {"tipodoc": type, "quantity": quantity}
+    return _post("cafs", data=data)
 
 
 def get_number(type, number):
@@ -37,5 +37,5 @@ def get_number(type, number):
     type -- String (minlength 2, maxlength 3)
     number -- Integer (min 1, max 10000)
     """
-    params = {'tipodoc':type, 'folio':number}
-    return _get('folios', params=params)
+    params = {"tipodoc": type, "folio": number}
+    return _get("folios", params=params)
