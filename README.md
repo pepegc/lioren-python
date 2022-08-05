@@ -5,7 +5,8 @@ You can check their documentation at [https://www.lioren.cl/docs](https://www.li
 ## TODOs
 
 - [X] ~Release "as is"~
-- [ ] Replace `requests` with `httpx`
+- [X] Replace `requests` with `httpx`
+- [ ] Full coverage
 - [ ] Add types & hinting
 
 ## License
