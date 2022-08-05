@@ -13,11 +13,9 @@ Localidad = constr(min_length=3, max_length=20, strip_whitespace=True)
 Direccion = constr(min_length=5, max_length=50, strip_whitespace=True)
 Nombre = constr(min_length=5, max_length=80, strip_whitespace=True)
 
-
-class ExpectsDTE(str, Enum):
-    xml = "xml"
-    pdf = "pdf"
-    _all = "all"
+NumeroFolio = conint(
+    ge=1, le=999999999999
+)  # https://www.lioren.cl/docs#/api-consultadte
 
 
 class EmisorDTE(BaseModel):
@@ -49,7 +47,7 @@ class DetalleDTE(BaseModel):
     codigo: Optional[constr(min_length=3, max_length=128, strip_whitespace=True)]
     nombre: Nombre
     cantidad: confloat(ge=0.000001, le=999999999)
-    unidad: Optional[constr(min_length=1, max_length=4, strip_whitespace=True)]
+    unidad: Optional[constr(min_length=2, max_length=4, strip_whitespace=True)]
     precio: confloat(ge=0, le=999999999)
     impuestoadicional: Optional[conint(ge=10, le=999)]
     montoimpuesto: Optional[conint(ge=10, le=999999999)]
@@ -66,9 +64,37 @@ class PagoDTE(BaseModel):
     cobrar: bool
 
 
-class Referencias(BaseModel):
+class ReferenciaDTE(BaseModel):
     fecha: date
     tipodoc: TipoDocumento
     folio: constr(min_length=1, max_length=18, strip_whitespace=True)
     razon: int
     glosa: constr(min_length=5, max_length=80, strip_whitespace=True)
+
+
+class ExpectsDTE(str, Enum):
+    xml = "xml"
+    pdf = "pdf"
+    _all = "all"
+
+
+class DTEResponse(BaserModel):
+    id: int
+    tipodoc: TipoDocumento
+    folio: int
+    fecha: str
+    rut: str
+    rs: str
+    montoneto: int
+    montoexento: int
+    montoiva: int
+    montototal: int
+    detalles: list
+    pagos: list
+    referencias: list
+    pdf: str
+    xml: str
+    estado: str
+    glosaestado: Optional[str]
+    trackid: Optional[str]
+    errors: Optional[list]
