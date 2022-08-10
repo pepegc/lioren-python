@@ -10,6 +10,7 @@
 - [X] ~Replace `requests` with `httpx`~
 - [ ] Full coverage
 - [ ] Add types & hinting
+- [ ] Installable package
 
 ## License
 
