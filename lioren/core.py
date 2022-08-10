@@ -15,14 +15,18 @@ def _get(uri: str, params: Optional[RequestParams]) -> APIResponse:
     return response.json()
 
 
-def _post(uri: str, data: Optional[RequestData], params: Optional[RequestParams]) -> APIResponse:
+def _post(
+    uri: str, data: Optional[RequestData], params: Optional[RequestParams]
+) -> APIResponse:
     response = httpx.post(
         BASE_URL + uri, headers=__headers(), data=json.dumps(data), params=params
     )
     return response.json()
 
 
-def _put(uri: str, data: Optional[RequestData], params: Optional[RequestParams]) -> APIResponse:
+def _put(
+    uri: str, data: Optional[RequestData], params: Optional[RequestParams]
+) -> APIResponse:
     response = httpx.put(
         BASE_URL + uri, headers=__headers(), data=json.dumps(data), params=params
     )

@@ -1,3 +1,7 @@
+from datetime import date
+
+from pydantic import conint
+
 from lioren.core import _get
 from lioren.core import _post
 from lioren.schemas import (
@@ -11,12 +15,12 @@ from lioren.schemas import (
 )
 
 
-def get_document_types():
-    """OBTENCIÓN DE TIPOS DE DOCUMENTOS"""
+def get_tipos_documento():
+    """OBTENER TIPOS DE DOCUMENTOS"""
     return _get("tipodocs")
 
 
-def post_document(
+def post_dte(
     emisor: EmisorDTE,
     receptor: ReceptorDTE,
     detalles: list[DetalleDTE],
@@ -35,19 +39,19 @@ def post_document(
     return _post("dtes", data=data)
 
 
-def get_document(
+def get_dte(
     tipodoc: TipoDocumento,
     folio: NumeroFolio,
     expects: Optional[ExpectsDTE],
 ) -> ResponseDTE:
     """CONSULTA DE DOCUMENTOS"""
     params = {"tipodoc": tipodoc, "folio": folio}
-    if expects is not None:
+    if expects:
         params["expects"] = expects
     return _get("dtes", params=params)
 
 
-def post_receipt(
+def post_boleta(
     detalles, emisor, receptor=None, pagos=None, referencias=None, expects=None
 ):
     """EMITIR BOLETA ELECTRONICA"""
@@ -63,31 +67,29 @@ def post_receipt(
     return _post("boletas", data=data)
 
 
-def get_receipt(type, number, expects=None):
-    """CONSULTA DE BOLETAS
-    Keyword arguments:
-    type -- String (minlength 2, maxlength 3)
-    number -- Integer (min 1, max 999999999)
-    expects -- String (xml | pdf)
-    """
-    params = {"tipodoc": type, "folio": number}
-    if expects is not None:
+def get_boleta(
+    tipodoc: TipoDocumento, folio: NumeroFolio, expects: Optional[ExpectsDTE]
+):
+    """CONSULTA DE BOLETAS"""
+    params = {"tipodoc": tipodoc, "folio": folio}
+    if expects:
         params["expects"] = expects
     return _get("boletas", params=params)
 
 
-def get_received_documents(received_on=None, issued_on=None, rpp=10, page=1):
-    """CONSULTA DE DOCUMENTOS RECIBIDOS
-    Keyword arguments:
-    received_on -- String (YYYY-MM-DD)
-    issued_on -- String (YYYY-MM-DD)
-    results_per_page -- Integer (min 1, max 100)
-    page -- Integer (min 1)
-    """
+def get_documentos_recibidos(
+    received_on: Optional[date],
+    issued_on: Optional[date],
+    results_per_page: conint(ge=1, le=100) = 10,
+    page: int = 1,
+):
+    """CONSULTA DE DOCUMENTOS RECIBIDOS"""
     params = {
-        "fecharecepcion": received_on,
-        "fechaemision": issued_on,
-        "rpp": rpp,
+        "rpp": results_per_page,
         "page": page,
     }
+    if received_on:
+        params["fecharecepcion"] = received_on.strftime("%Y-%m-%d")
+    if issued_on:
+        params["fechaemision"] = issued_on.strftime("%Y-%m-%d")
     return _get("recepciondtes", params=params)
